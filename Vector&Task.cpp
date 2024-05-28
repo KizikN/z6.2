@@ -9,9 +9,7 @@
 using namespace std;
 
 
-Vector::Vector()
-{
-}
+Vector::Vector(){}
 
 Vector::Vector(Button a)
 {
@@ -49,6 +47,12 @@ Vector::Vector(HyperlinkLabel a)
 	*VECTOR = B;
 }
 
+Vector::Vector(Base** a)
+{
+	n = 1;
+	VECTOR = a;
+}
+
 Vector::Vector(Vector& V)
 {
 	n = V.SizeOf();
@@ -68,6 +72,7 @@ Vector::~Vector()
 {
 	delete[] VECTOR;
 	VECTOR = nullptr;
+	n = 0;
 }
 
 Vector& Vector:: operator =(Vector&& V)
@@ -102,11 +107,11 @@ Base* Vector:: operator [](int i)
  ostream& operator<<(ostream &os,Vector& V)
 {
 	 int Size = V.SizeOf();
-	cout << "Elements: ";
+	os << "Elements: ";
 	for (int i = 0; i < Size; i++)
 	{
 		V[i]->Print();
-		cout << endl;
+		os << "\n";
 	}
 	 return os;
 } 
@@ -118,16 +123,39 @@ int Vector::SizeOf()
 
 void Vector::Delete(int k)
 {
-	if (k < n)
+	if (k < n && k >= 0)
 	{
-		Base** New = new Base * [n - 1];
-		for (int i = 0; i < k; i++)
-			New[i] = VECTOR[i];
-		for(int i = k + 1; i < n; i++)
-			New[i] = VECTOR[i];
-		VECTOR = New;
-		n--;
+		if (n - 1 != 0)
+		{
+			Base** New = new Base * [n - 1];
+			for (int i = 0; i < k; i++)
+				New[i] = VECTOR[i];
+			for (int i = k + 1; i < n; i++)
+				New[i] = VECTOR[i];
+			VECTOR = New;
+			n--;
+		}
+		else
+			VECTOR = NULL;
 	}
+}
+
+void Vector::Clear()
+{
+	while (n != 0)
+	{
+		Delete(0);
+	}
+}
+
+void Vector::PushBack(Base** a)
+{
+	Base** New = new Base * [n + 1];
+	for (int i = 0; i < n; i++)
+		New[i] = VECTOR[i];
+	New[n] = *a;
+	VECTOR = New;
+	n++;
 }
 
 void Vector::PushBack(Button a)

@@ -14,11 +14,13 @@ int main()
 {
 	Button B;
 	B.Change_Size(12, 13);
-	Vector b(B);
-	b.PushBack(B);
+	Vector b(B);			//создание
+	Base** a = new Base*;
+	*a = &B;
+	b.PushBack(a);			//универсальный PushBack
 	cout << b;
-	cout << endl << endl;
-	b.Delete(1);
+	cout << endl << endl;	//вывод
+	b.Delete(1);			//удаление
 	cout << b;
 	return 0;
 }
